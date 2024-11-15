@@ -1,5 +1,5 @@
 {
-  "book": "Kitoblar",
+  "book": "Barcha kitoblar",
   "audiobook": "Audiokitoblar",
   "collection": "To'plami",
   "search": "Kitoblarni qidirish",
@@ -24,6 +24,14 @@
   "light_mode": "Kunduzgi rejim",
   "uz": "O'zbekcha",
   "ru": "Ruscha",
-  "en": "Krilcha",
-  "listen": "Tinglash"
+  "en": "Kirilcha",
+  "listen": "Tinglash",
+  "videobook": "Videokitoblar",
+  "sleep_timer": "Uhlash vaqti",
+  "speed": "Tezlik",
+  "done": "Tayyor",
+  "no_timer": "Vaqt yo'q",
+  "minutes": "daqiqa",
+  "music_stop_in": "Musiqa to'xtaydi:",
+  "playback_speed": "Tezlik {}"
 }

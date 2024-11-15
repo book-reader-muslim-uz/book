@@ -1,11 +1,9 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:book/core/constants/enums.dart';
 import 'package:book/core/theme/app_colors.dart';
 import 'package:book/core/widgets/book_grid.dart';
 import 'package:book/core/widgets/custom_appbar.dart';
 import 'package:book/core/widgets/custom_textfield.dart';
 import 'package:book/features/domain/entity/book_entity.dart';
-import 'package:book/features/presentation/home/audiobloc/audio_book_bloc.dart';
 import 'package:book/features/presentation/home/bloc/book_bloc.dart';
 import 'package:book/features/presentation/home/widgets/custom_bottom_sheet.dart';
 import 'package:book/features/presentation/home/widgets/shimmer_book.dart';
@@ -39,13 +37,18 @@ class _HomePageState extends State<HomePage> {
   final List<Map<String, String>> _category = const [
     {
       "id": "1",
-      "title": "Books",
+      "title": "PDF Books",
       "image": "book",
     },
     {
       "id": "2",
       "title": "Audio Books",
       "image": "audio_book",
+    },
+    {
+      "id": "3",
+      "title": "Video Books",
+      "image": "video_book",
     },
   ];
 
@@ -56,52 +59,47 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<BookBloc>().add(GetBooksEvent());
-    context.read<AudioBookBloc>().add(GetAudioBooksEvent());
   }
 
   Future<void> _onRefresh() async {
-    if (selectedCategory == "1") {
-      context.read<BookBloc>().add(GetBooksEvent());
-    } else {
-      context.read<AudioBookBloc>().add(GetAudioBooksEvent());
-    }
+    context.read<BookBloc>().add(GetBooksEvent());
     await Future.delayed(const Duration(seconds: 1));
   }
 
   void _navigateToSearchScreen(BuildContext context) {
-    if (selectedCategory == "1") {
-      final bookState = context.read<BookBloc>().state;
-      if (bookState is BookLoadedState) {
-        Navigator.push(
-          context,
-          CupertinoPageRoute(
-            builder: (context) => SearchScreen(
-              books: bookState.books,
-              bookType: BookType.book,
-            ),
+    final bookState = context.read<BookBloc>().state;
+    if (bookState is BookLoadedState) {
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => SearchScreen(
+            books: _filterBooksByCategory(bookState.books),
           ),
-        );
-      }
-    } else {
-      final audioBookState = context.read<AudioBookBloc>().state;
-      if (audioBookState is AudioBookLoadedState) {
-        Navigator.push(
-          context,
-          CupertinoPageRoute(
-            builder: (context) => SearchScreen(
-              books: audioBookState.books,
-              bookType: BookType.audioBook,
-            ),
-          ),
-        );
-      }
+        ),
+      );
+    }
+  }
+
+  List<BookEntity> _filterBooksByCategory(List<BookEntity> books) {
+    switch (selectedCategory) {
+      case "1": // PDF Books
+        return books;
+      case "2": // Audio Books
+        return books.where((book) => book.audioUrl != null).toList();
+      case "3": // Video Books
+        return books.where((book) => book.videoUrl != null).toList();
+      default:
+        return books;
     }
   }
 
   List<String> _getGenres(List<BookEntity> books) {
     Set<String> genres = {'All'};
-    for (var book in books) {
-      genres.add(book.genre);
+    final filteredBooks = _filterBooksByCategory(books);
+    for (var book in filteredBooks) {
+      if (book.genre.isNotEmpty) {
+        genres.add(book.genre);
+      }
     }
     return genres.toList();
   }
@@ -154,82 +152,59 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildBookContent(List<BookEntity> books, BookType bookType) {
+  Widget _buildBookContent(List<BookEntity> books) {
+    // First filter by category (PDF/Audio/Video)
+    final categoryFilteredBooks = _filterBooksByCategory(books);
+
+    // Then filter by genre if needed
     final filteredBooks = selectedGenre == 'All'
-        ? books
-        : books.where((book) => book.genre == selectedGenre).toList();
+        ? categoryFilteredBooks
+        : categoryFilteredBooks
+            .where((book) => book.genre == selectedGenre)
+            .toList();
 
     return filteredBooks.isEmpty
-        ? const SizedBox(
+        ? SizedBox(
             height: 500,
             child: Center(
-              child: Text("No books available"),
+              child: Text(
+                  "No ${_category.firstWhere((cat) => cat['id'] == selectedCategory)['title']} available"),
             ),
           )
         : BookGrid(
             files: filteredBooks,
-            bookType: bookType,
           );
   }
 
   Widget _buildContent() {
-    return selectedCategory == "1"
-        ? BlocBuilder<BookBloc, BookState>(
-            builder: (context, state) {
-              if (state is BookLoadedState) {
-                final genres = _getGenres(state.books);
-                return Expanded(
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      children: [
-                        const Gap(12),
-                        _buildGenreFilter(genres),
-                        _buildBookContent(state.books, BookType.book),
-                      ],
-                    ),
-                  ),
-                );
-              } else if (state is BookErrorState) {
-                return Expanded(
-                  child: Center(
-                    child: Text(state.errorMessage),
-                  ),
-                );
-              }
-              return Expanded(
-                child: buildShimmerLoading(context),
-              );
-            },
-          )
-        : BlocBuilder<AudioBookBloc, AudioBookState>(
-            builder: (context, state) {
-              if (state is AudioBookLoadedState) {
-                final genres = _getGenres(state.books);
-                return Expanded(
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      children: [
-                        const Gap(12),
-                        _buildGenreFilter(genres),
-                        _buildBookContent(state.books, BookType.audioBook),
-                      ],
-                    ),
-                  ),
-                );
-              } else if (state is AudioBookErrorState) {
-                return Expanded(
-                  child: Center(
-                    child: Text(state.errorMessage),
-                  ),
-                );
-              }
-              return Expanded(
-                child: buildShimmerLoading(context),
-              );
-            },
+    return BlocBuilder<BookBloc, BookState>(
+      builder: (context, state) {
+        if (state is BookLoadedState) {
+          final genres = _getGenres(state.books);
+          return Expanded(
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  const Gap(12),
+                  _buildGenreFilter(genres),
+                  _buildBookContent(state.books),
+                ],
+              ),
+            ),
           );
+        } else if (state is BookErrorState) {
+          return Expanded(
+            child: Center(
+              child: Text(state.errorMessage),
+            ),
+          );
+        }
+        return Expanded(
+          child: buildShimmerLoading(context),
+        );
+      },
+    );
   }
 
   @override
@@ -264,7 +239,8 @@ class _HomePageState extends State<HomePage> {
                           onTap: (categoryId) {
                             setState(() {
                               selectedCategory = categoryId;
-                              selectedGenre = 'All';
+                              selectedGenre =
+                                  'All'; // Reset genre when changing category
                             });
                           },
                         ),
@@ -280,7 +256,7 @@ class _HomePageState extends State<HomePage> {
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Image.asset(
-                          "assets/images/$selectedImage.png",
+                          "assets/images/filter.png",
                           color: AppColors.white,
                         ),
                       ),

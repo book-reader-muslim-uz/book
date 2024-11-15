@@ -40,7 +40,7 @@ class CustomTextfield extends StatelessWidget {
           //       : Colors.black,
           // ),
         ),
-        hintText: "search".tr(),
+        hintText: "search".tr(context: context),
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(25),

@@ -1,15 +1,19 @@
-import 'package:book/core/constants/enums.dart';
 import 'package:book/core/widgets/cache_image.dart';
+import 'package:book/features/domain/entity/book_entity.dart';
 import 'package:book/features/presentation/home/pages/book_info_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteCard extends StatelessWidget {
-  final dynamic book;
+  final BookEntity book;
 
   const FavoriteCard({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
+    // print(book.audioUrl);
+    // print(book.bookUrl);
+    // print(book.videoUrl);
     return Card(
       elevation: 8,
       margin: const EdgeInsets.symmetric(vertical: 5),
@@ -21,7 +25,7 @@ class FavoriteCard extends StatelessWidget {
           Positioned.fill(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: CacheImage(imageUrl: book),
+              child: CacheImage(imageUrl: book.coverImageUrl),
             ),
           ),
           Positioned.fill(
@@ -44,7 +48,7 @@ class FavoriteCard extends StatelessWidget {
             leading: SizedBox(
               width: 50,
               height: 50,
-              child: CacheImage(imageUrl: book,),
+              child: CacheImage(imageUrl: book.coverImageUrl),
             ),
             title: Text(
               book.title,
@@ -75,11 +79,19 @@ class FavoriteCard extends StatelessWidget {
     );
   }
 
-  void _navigateToBookInfoScreen(BuildContext context, dynamic book) {
+  void _navigateToBookInfoScreen(
+    BuildContext context,
+    BookEntity book,
+  ) {
+    // print(book.audioUrl);
+    // print(book.bookUrl);
+    // print(book.videoUrl);
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => BookInfoScreen(book: book, bookType: BookType.book,),
+      CupertinoPageRoute(
+        builder: (context) => BookInfoScreen(
+          book: book,
+        ),
       ),
     );
   }

@@ -36,8 +36,8 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
 
   _addBook(AddFavouriteBookEvent event, Emitter<FavouriteState> emit) async {
     emit(FavouriteLoadingState());
-    final result = await addLocalBookUsecase.call(event.bookEntity);
 
+    final result = await addLocalBookUsecase.call(event.bookEntity);
     result.fold(
       (l) => emit(FavouriteErrorState(errorMessage: l.toString())),
       (r) => add(GetFavouriteBooksEvent()),

@@ -1,6 +1,14 @@
 import 'dart:async';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:book/core/theme/app_colors.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
+import 'package:just_audio/just_audio.dart';
+import 'dart:async';
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:book/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -33,7 +41,7 @@ class _AudioBottomWidgetState extends State<AudioBottomWidget> {
             children: [
               const Gap(10),
               ListTile(
-                title: const Text('No timer'),
+                title: Text('no_timer'.tr(context: context)),
                 onTap: () {
                   Navigator.pop(context);
                   _cancelTimer();
@@ -51,7 +59,7 @@ class _AudioBottomWidgetState extends State<AudioBottomWidget> {
 
   ListTile _buildTimerListTile(BuildContext context, int minutes) {
     return ListTile(
-      title: Text('$minutes minutes'),
+      title: Text('$minutes ${'minutes'.tr(context: context)}'),
       onTap: () {
         Navigator.pop(context);
         _startTimer(minutes);
@@ -60,7 +68,7 @@ class _AudioBottomWidgetState extends State<AudioBottomWidget> {
   }
 
   void _startTimer(int minutes) {
-    _cancelTimer(); // Cancel any existing timer
+    _cancelTimer();
     _remainingSeconds = minutes * 60;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
@@ -105,7 +113,9 @@ class _AudioBottomWidgetState extends State<AudioBottomWidget> {
               children: [
                 ListTile(
                   title: Text(
-                    'Speed ${playbackSpeed.toStringAsFixed(1)}',
+                    'playback_speed'
+                        .tr(context: context)
+                        .replaceAll('{}', playbackSpeed.toStringAsFixed(1)),
                     style: TextStyle(
                       color: Theme.of(context).textTheme.titleLarge!.color,
                       fontSize: 22,
@@ -141,7 +151,7 @@ class _AudioBottomWidgetState extends State<AudioBottomWidget> {
                 ),
                 const Gap(20.0),
                 AppButton(
-                  text: "Done",
+                  text: "done".tr(context: context),
                   color: AppColors.primaryColor,
                   onTap: () {
                     widget.audioPlayer.setSpeed(playbackSpeed);
@@ -165,7 +175,7 @@ class _AudioBottomWidgetState extends State<AudioBottomWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
-              'Music will stop in: ${_formatTime(_remainingSeconds)}',
+              '${'music_stop_in'.tr(context: context)} ${_formatTime(_remainingSeconds)}',
               style: TextStyle(
                 color: AppColors.primaryColor,
                 fontWeight: FontWeight.bold,
@@ -199,7 +209,7 @@ class _AudioBottomWidgetState extends State<AudioBottomWidget> {
                       ),
                       const Gap(5.0),
                       Text(
-                        "Uhlash vaqti",
+                        "sleep_timer".tr(context: context),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -236,7 +246,7 @@ class _AudioBottomWidgetState extends State<AudioBottomWidget> {
                       ),
                       const Gap(5.0),
                       Text(
-                        "Tezlik",
+                        "speed".tr(context: context),
                         style: TextStyle(
                           color: AdaptiveTheme.of(context).mode ==
                                   AdaptiveThemeMode.dark

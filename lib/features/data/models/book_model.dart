@@ -18,13 +18,15 @@ class BookModel {
   @HiveField(5)
   String genre;
   @HiveField(6)
-  String bookUrl;
+  String? bookUrl;
   @HiveField(7)
-  String publishedDate;
+  String? audioUrl;
   @HiveField(8)
-  String title;
+  String? videoUrl;
   @HiveField(9)
-  bool isBook;
+  String publishedDate;
+  @HiveField(10)
+  String title;
 
   BookModel({
     required this.id,
@@ -33,10 +35,11 @@ class BookModel {
     required this.coverImageUrl,
     required this.description,
     required this.genre,
-    required this.bookUrl,
+    this.bookUrl,
+    this.audioUrl,
+    this.videoUrl,
     required this.publishedDate,
     required this.title,
-    required this.isBook,
   });
 
   BookEntity toEntity() {
@@ -48,13 +51,16 @@ class BookModel {
       description: description,
       genre: genre,
       bookUrl: bookUrl,
+      audioUrl: audioUrl,
+      videoUrl: videoUrl,
       publishedDate: publishedDate,
-      isBook: isBook,
       title: title,
     );
   }
 
-  factory BookModel.fromMap(Map<String, dynamic> map, {required bool isBook}) {
+  factory BookModel.fromMap(
+    Map<String, dynamic> map,
+  ) {
     return BookModel(
       id: map['id'] as String,
       author: map['author'] as String,
@@ -62,8 +68,9 @@ class BookModel {
       coverImageUrl: map['coverImageUrl'] as String,
       description: map['description'] as String,
       genre: map['genre'] as String,
-      isBook: isBook,
-      bookUrl: map['bookUrl'] as String,
+      bookUrl: map['bookUrl'],
+      audioUrl: map['audioUrl'],
+      videoUrl: map['videoUrl'],
       publishedDate: map['publishedDate'] as String,
       title: map['title'] as String,
     );

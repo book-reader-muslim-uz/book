@@ -1,25 +1,27 @@
 class BookEntity {
   String id;
-  String author;
-  String categoryId;
-  String coverImageUrl;
-  String description;
-  String genre;
-  String bookUrl;
-  String publishedDate;
-  String title;
-  bool isBook;
+  final String title;
+  final String author;
+  final String description;
+  final String? bookUrl;
+  final String? audioUrl;
+  final String? videoUrl;
+  final String coverImageUrl;
+  final String publishedDate;
+  final String genre;
+  final String categoryId;
 
   BookEntity({
-    required this.isBook,
     required this.id,
-    required this.author,
-    required this.categoryId,
-    required this.coverImageUrl,
-    required this.description,
-    required this.genre,
-    required this.bookUrl,
-    required this.publishedDate,
     required this.title,
+    required this.author,
+    required this.description,
+    this.bookUrl,
+    this.audioUrl,
+    this.videoUrl,
+    required this.coverImageUrl,
+    required this.publishedDate,
+    required this.genre,
+    required this.categoryId,
   });
 }

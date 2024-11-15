@@ -1,6 +1,4 @@
-
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:book/core/constants/enums.dart';
 import 'package:book/core/widgets/cache_image.dart';
 import 'package:book/features/domain/entity/book_entity.dart';
 import 'package:book/features/presentation/home/pages/book_info_screen.dart';
@@ -9,10 +7,8 @@ import 'package:flutter/material.dart';
 
 class BookGrid extends StatelessWidget {
   final List<BookEntity> files;
-  final BookType bookType;
   const BookGrid({
     super.key,
-    this.bookType = BookType.book,
     required this.files,
   });
 
@@ -38,7 +34,6 @@ class BookGrid extends StatelessWidget {
               context,
               CupertinoPageRoute(
                 builder: (context) => BookInfoScreen(
-                  bookType: bookType,
                   book: item,
                 ),
               ),

@@ -23,17 +23,18 @@ class BookModelAdapter extends TypeAdapter<BookModel> {
       coverImageUrl: fields[3] as String,
       description: fields[4] as String,
       genre: fields[5] as String,
-      bookUrl: fields[6] as String,
-      publishedDate: fields[7] as String,
-      title: fields[8] as String,
-      isBook: fields[9] as bool,
+      bookUrl: fields[6] as String?,
+      audioUrl: fields[7] as String?,
+      videoUrl: fields[8] as String?,
+      publishedDate: fields[9] as String,
+      title: fields[10] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, BookModel obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -49,11 +50,13 @@ class BookModelAdapter extends TypeAdapter<BookModel> {
       ..writeByte(6)
       ..write(obj.bookUrl)
       ..writeByte(7)
-      ..write(obj.publishedDate)
+      ..write(obj.audioUrl)
       ..writeByte(8)
-      ..write(obj.title)
+      ..write(obj.videoUrl)
       ..writeByte(9)
-      ..write(obj.isBook);
+      ..write(obj.publishedDate)
+      ..writeByte(10)
+      ..write(obj.title);
   }
 
   @override

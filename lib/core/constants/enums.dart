@@ -1,1 +1,1 @@
-enum BookType { book, audioBook }
+enum BookType { pdf, audio, video, }

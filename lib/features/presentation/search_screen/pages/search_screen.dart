@@ -12,27 +12,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchScreen extends StatelessWidget {
   final List<BookEntity> books;
-  final BookType bookType;
 
   const SearchScreen({
     super.key,
     required this.books,
-    required this.bookType,
   });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SearchCubit(allBooks: books),
-      child: _SearchScreenContent(bookType: bookType),
+      child: _SearchScreenContent(),
     );
   }
 }
 
 class _SearchScreenContent extends StatefulWidget {
-  final BookType bookType;
-
-  const _SearchScreenContent({required this.bookType});
+  const _SearchScreenContent();
 
   @override
   _SearchScreenContentState createState() => _SearchScreenContentState();
@@ -64,8 +60,8 @@ class _SearchScreenContentState extends State<_SearchScreenContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('search'.tr(), style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('search'.tr(context: context),
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(70),
           child: Padding(
@@ -75,7 +71,7 @@ class _SearchScreenContentState extends State<_SearchScreenContent> {
               onChanged: (query) =>
                   context.read<SearchCubit>().onSearchChanged(query),
               decoration: InputDecoration(
-                hintText: 'search'.tr(),
+                hintText: 'search'.tr(context: context),
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -152,7 +148,6 @@ class _SearchScreenContentState extends State<_SearchScreenContent> {
               CupertinoPageRoute(
                 builder: (context) => BookInfoScreen(
                   book: book,
-                  bookType: widget.bookType,
                 ),
               ),
             );

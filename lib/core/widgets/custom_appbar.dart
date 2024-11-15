@@ -14,7 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         text: TextSpan(
           children: [
             TextSpan(
-              text: "book".tr(),
+              text: "book".tr(context: context),
               style: TextStyle(
                 color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
                     ? Colors.white
@@ -24,7 +24,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             TextSpan(
-              text: "collection".tr(),
+              text: "collection".tr(context: context),
               style: const TextStyle(
                 color: Color(0xffD1618A),
                 fontSize: 20,

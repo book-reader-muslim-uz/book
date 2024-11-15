@@ -16,12 +16,13 @@ class AddLocalBookUsecase extends Usecase<void, BookEntity> {
       BookModel(
         id: params.id,
         author: params.author,
-        isBook: params.isBook,
         categoryId: params.categoryId,
         coverImageUrl: params.coverImageUrl,
         description: params.description,
         genre: params.genre,
         bookUrl: params.bookUrl,
+        audioUrl: params.audioUrl,
+        videoUrl: params.videoUrl,
         publishedDate: params.publishedDate,
         title: params.title,
       ),
@@ -40,7 +41,6 @@ class DeleteLocalBookUsecase extends Usecase<void, BookEntity> {
       BookModel(
         id: params.id,
         author: params.author,
-        isBook: params.isBook,
         categoryId: params.categoryId,
         coverImageUrl: params.coverImageUrl,
         description: params.description,

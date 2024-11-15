@@ -1,11 +1,11 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:book/core/constants/enums.dart';
 import 'package:book/core/theme/app_colors.dart';
 import 'package:book/core/widgets/cache_image.dart';
 import 'package:book/features/domain/entity/book_entity.dart';
 import 'package:book/features/presentation/audio_listening/pages/audio_listening_screen.dart';
 import 'package:book/features/presentation/home/pages/book_reader_screen.dart';
 import 'package:book/features/presentation/favorite_screen/bloc/favourite_bloc.dart';
+import 'package:book/features/presentation/home/pages/video_player_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +16,14 @@ import 'package:just_audio_background/just_audio_background.dart';
 
 class BookInfoScreen extends StatelessWidget {
   final BookEntity book;
-  final BookType bookType;
   const BookInfoScreen({
     super.key,
-    required this.bookType,
     required this.book,
   });
 
   @override
   Widget build(BuildContext context) {
     double appBarHeight = MediaQuery.of(context).size.height / 2.1;
-
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -140,99 +137,131 @@ class BookInfoScreen extends StatelessWidget {
                   topLeft: Radius.circular(30),
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Stack(
                 children: [
-                  const SizedBox(height: 20),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "${"genre".tr()}: ",
-                          style: TextStyle(
-                            color: AdaptiveTheme.of(context).mode ==
-                                    AdaptiveThemeMode.dark
-                                ? Colors.white
-                                : Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(
-                          text: book.genre,
-                          style: const TextStyle(
-                            color: Color(0xffD1618A),
-                          ),
-                        ),
-                      ],
+                  if (book.videoUrl != null && book.videoUrl!.isNotEmpty)
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VideoPlayerPage(
+                                videoUrl: book.videoUrl!,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.only(top: 23),
+                            width: 80,
+                            height: 40,
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(12)),
+                            child: const Icon(
+                              Icons.play_arrow_rounded,
+                              color: Colors.white,
+                            )),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    "author".tr(),
-                    style: TextStyle(
-                      color: AdaptiveTheme.of(context).mode ==
-                              AdaptiveThemeMode.dark
-                          ? Colors.white
-                          : Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        backgroundColor: AdaptiveTheme.of(context).mode ==
-                                AdaptiveThemeMode.dark
-                            ? Colors.black
-                            : Colors.white,
-                        radius: 23,
-                        child: const Icon(Icons.person),
+                      const SizedBox(height: 20),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "${"genre".tr(context: context)}: ",
+                              style: TextStyle(
+                                color: AdaptiveTheme.of(context).mode ==
+                                        AdaptiveThemeMode.dark
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(
+                              text: book.genre,
+                              style: const TextStyle(
+                                color: Color(0xffD1618A),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(width: 5),
-                      Column(
+                      const SizedBox(height: 10),
+                      Text(
+                        "author".tr(context: context),
+                        style: TextStyle(
+                          color: AdaptiveTheme.of(context).mode ==
+                                  AdaptiveThemeMode.dark
+                              ? Colors.white
+                              : Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            book.author,
-                            style: TextStyle(
-                              color: AdaptiveTheme.of(context).mode ==
-                                      AdaptiveThemeMode.dark
-                                  ? Colors.grey
-                                  : Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          CircleAvatar(
+                            backgroundColor: AdaptiveTheme.of(context).mode ==
+                                    AdaptiveThemeMode.dark
+                                ? Colors.black
+                                : Colors.white,
+                            radius: 23,
+                            child: const Icon(Icons.person),
                           ),
-                          Text(
-                            "${"date".tr()}: ${book.publishedDate}",
-                            style: TextStyle(
-                              color: AdaptiveTheme.of(context).mode ==
-                                      AdaptiveThemeMode.dark
-                                  ? Colors.grey
-                                  : Colors.black,
-                              fontSize: 15,
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  book.author,
+                                  style: TextStyle(
+                                    color: AdaptiveTheme.of(context).mode ==
+                                            AdaptiveThemeMode.dark
+                                        ? Colors.grey
+                                        : Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "${"date".tr(context: context)}: ${book.publishedDate}",
+                                  style: TextStyle(
+                                    color: AdaptiveTheme.of(context).mode ==
+                                            AdaptiveThemeMode.dark
+                                        ? Colors.grey
+                                        : Colors.black,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
+                      const SizedBox(height: 15),
+                      Text(
+                        book.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        book.description,
+                      ),
+                      const Gap(80),
                     ],
                   ),
-                  const SizedBox(height: 15),
-                  Text(
-                    book.title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    book.description,
-                    style: const TextStyle(),
-                  ),
-                  const Gap(80),
                 ],
               ),
             ),
@@ -241,44 +270,61 @@ class BookInfoScreen extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: FilledButton(
-          style: FilledButton.styleFrom(
-            fixedSize: Size(MediaQuery.of(context).size.width, 50),
-            backgroundColor: AppColors.primaryColor,
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (context) => bookType == BookType.book
-                    ? BookReaderScreen(url: book.bookUrl)
-                    : AudioListeningScreen(
-                        audioSource: AudioSource.uri(
-                          Uri.parse(
-                            book.bookUrl,
-                          ),
-                          tag: MediaItem(
-                            id: '0',
-                            title: book.title,
-                            artist: book.author,
-                            artUri: Uri.parse(
-                              book.coverImageUrl,
+        padding: EdgeInsets.only(
+          right: book.bookUrl != null ? 15 : 7.5,
+          left: book.audioUrl != null ? 15 : 7.5,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (book.audioUrl != null)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 7.5),
+                  child: FloatingActionButton(
+                    backgroundColor: AppColors.primaryColor,
+                    heroTag: "Button1",
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        isDismissible: true,
+                        useSafeArea: true,
+                        builder: (context) => AudioListeningScreen(
+                          audioSource: AudioSource.uri(
+                            tag: MediaItem(
+                              id: '0',
+                              title: book.title,
+                              artist: book.author,
+                              artUri: Uri.parse(book.coverImageUrl),
                             ),
+                            Uri.parse(book.audioUrl!),
                           ),
                         ),
-                      ),
+                      );
+                    },
+                    child: Text("listen".tr(context: context)),
+                  ),
+                ),
               ),
-            );
-          },
-          child: Text(
-            bookType == BookType.book ? "o'qish".tr() : "listen".tr(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
+            if (book.bookUrl != null)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 7.5),
+                  child: FloatingActionButton(
+                    backgroundColor: AppColors.primaryColor,
+                    heroTag: "Button2",
+                    onPressed: () {
+                      Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (context) =>
+                            BookReaderScreen(url: book.bookUrl!),
+                      ));
+                    },
+                    child: Text("o'qish".tr(context: context)),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

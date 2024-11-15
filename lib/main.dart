@@ -2,9 +2,7 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:book/features/data/datasource/book_local_datasource.dart';
 import 'package:book/features/data/models/book_model.dart';
 import 'package:book/features/data/repository/book_local_repository_impl.dart';
-import 'package:book/features/domain/usecases/get_audiobooks_usecase.dart';
 import 'package:book/features/domain/usecases/local_book_usecases.dart';
-import 'package:book/features/presentation/home/audiobloc/audio_book_bloc.dart';
 import 'package:book/features/presentation/favorite_screen/bloc/favourite_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +16,28 @@ import 'package:book/features/presentation/home/bloc/book_bloc.dart';
 import 'package:book/features/presentation/navigation/cubit/navigation_cubit.dart';
 import 'package:book/features/presentation/navigation/pages/main_navigation_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:just_audio_background/just_audio_background.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+Future<void> requestPermissions() async {
+  if (await Permission.notification.isDenied) {
+    await Permission.notification.request();
+  }
+
+  // For Android 13 (API level 33) and above
+  if (await Permission.audio.isDenied) {
+    await Permission.audio.request();
+  }
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await requestPermissions();
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
   await EasyLocalization.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(BookModelAdapter());
@@ -78,15 +95,6 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
           ),
-        ),
-        BlocProvider(
-          create: (context) => AudioBookBloc(GetAudiobooksUsecase(
-            bookRepository: BookRepositoryImpl(
-              bookRemoteDatasource: BookRemoteDatasourceImpl(
-                dioClient: DioClient(),
-              ),
-            ),
-          )),
         ),
         BlocProvider(
           create: (context) => BookBloc(GetBooksUsecase(

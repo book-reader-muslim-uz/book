@@ -12,7 +12,7 @@ import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
 
 class MainNavigationScreen extends StatelessWidget {
   const MainNavigationScreen({super.key});
-  static const List<Widget> pages = [
+  static List<Widget> pages = [
     HomePage(),
     FavoriteScreen(),
     SettingScreen(),
@@ -20,10 +20,14 @@ class MainNavigationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<NavigationCubit, int>(
-        builder: (context, state) {
-          return LazyLoadIndexedStack(index: state, children: pages);
-        },
+      body: Stack(
+        children: [
+          BlocBuilder<NavigationCubit, int>(
+            builder: (context, state) {
+              return LazyLoadIndexedStack(index: state, children: pages);
+            },
+          ),
+        ],
       ),
       bottomNavigationBar: const CustomNavigationBar(),
     );
@@ -38,15 +42,15 @@ class CustomNavigationBar extends StatelessWidget {
     List<Map<String, dynamic>> items = [
       {
         "icon": {"active": "home"},
-        "label": "book".tr()
+        "label": "book".tr(context: context)
       },
       {
         "icon": {"active": "favourite_book"},
-        "label": "favorites".tr()
+        "label": "favorites".tr(context: context)
       },
       {
         "icon": {"active": "settings"},
-        "label": "settings".tr()
+        "label": "settings".tr(context: context)
       },
     ];
     final isDarkMode = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark;

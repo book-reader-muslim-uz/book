@@ -54,7 +54,7 @@ class _SettingScreenState extends State<SettingScreen> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                'settings'.tr(),
+                'settings'.tr(context: context),
                 style: const TextStyle(
                   color: Colors.white,
                   shadows: [
@@ -97,7 +97,9 @@ class _SettingScreenState extends State<SettingScreen> {
                           color: Colors.blue.shade800,
                         ),
                         title: Text(
-                          isDarkMode ? 'dark_mode'.tr() : 'light_mode'.tr(),
+                          isDarkMode
+                              ? 'dark_mode'.tr(context: context)
+                              : 'light_mode'.tr(context: context),
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
@@ -119,7 +121,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: Colors.blue.shade800,
                     ),
                     title: Text(
-                      'languages'.tr(),
+                      'languages'.tr(context: context),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -133,26 +135,25 @@ class _SettingScreenState extends State<SettingScreen> {
                         return <PopupMenuEntry<String>>[
                           PopupMenuItem<String>(
                             value: 'en',
-                            child: Text('en'.tr()),
+                            child: Text('en'.tr(context: context)),
                           ),
                           PopupMenuItem<String>(
                             value: 'ru',
-                            child: Text('ru'.tr()),
+                            child: Text('ru'.tr(context: context)),
                           ),
                           PopupMenuItem<String>(
                             value: 'uz',
-                            child: Text('uz'.tr()),
+                            child: Text('uz'.tr(context: context)),
                           ),
                         ];
                       },
                       offset: const Offset(0, 40),
                       elevation: 2,
-                      
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            context.locale.languageCode.tr(),
+                            context.locale.languageCode.tr(context: context),
                             style: const TextStyle(fontSize: 16),
                           ),
                           const Icon(Icons.arrow_drop_down),

@@ -58,61 +58,65 @@ class _AudioListeningScreenState extends State<AudioListeningScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            //? Header section
-            StreamBuilder<SequenceState?>(
-              stream: _audioPlayer.sequenceStateStream,
-              builder: (context, snapshot) {
-                final state = snapshot.data;
-                if (state?.sequence.isEmpty ?? true) {
-                  return const SizedBox();
-                }
-                final metadata = state!.currentSource!.tag as MediaItem;
-                return BookTitle(
-                  imageUrl: metadata.artUri.toString(),
-                  title: metadata.artist ?? "",
-                  artist: metadata.title,
-                );
-              },
-            ),
+        clipBehavior: Clip.hardEdge,
+        child: Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+          child: Column(
+            children: [
+              //? Header section
+              StreamBuilder<SequenceState?>(
+                stream: _audioPlayer.sequenceStateStream,
+                builder: (context, snapshot) {
+                  final state = snapshot.data;
+                  if (state?.sequence.isEmpty ?? true) {
+                    return const SizedBox();
+                  }
+                  final metadata = state!.currentSource!.tag as MediaItem;
+                  return BookTitle(
+                    imageUrl: metadata.artUri.toString(),
+                    title: metadata.artist ?? "",
+                    artist: metadata.title,
+                  );
+                },
+              ),
 
-            //? Progress bar
-            StreamBuilder(
-              stream: _positionDataStream,
-              builder: (context, snapshot) {
-                final postionData = snapshot.data;
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: ProgressBar(
-                    barHeight: 5,
-                    baseBarColor: AppColors.grey,
-                    bufferedBarColor: AppColors.greyLight,
-                    progressBarColor: AppColors.primaryColor,
-                    thumbRadius: 8,
-                    thumbGlowRadius: 20.0,
-                    thumbColor: AppColors.primaryColor,
-                    timeLabelLocation: TimeLabelLocation.above,
-                    timeLabelTextStyle: TextStyle(
-                      color: Theme.of(context).textTheme.labelSmall!.color,
-                      fontWeight: FontWeight.w400,
+              //? Progress bar
+              StreamBuilder(
+                stream: _positionDataStream,
+                builder: (context, snapshot) {
+                  final postionData = snapshot.data;
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: ProgressBar(
+                      barHeight: 5,
+                      baseBarColor: AppColors.grey,
+                      bufferedBarColor: AppColors.greyLight,
+                      progressBarColor: AppColors.primaryColor,
+                      thumbRadius: 8,
+                      thumbGlowRadius: 20.0,
+                      thumbColor: AppColors.primaryColor,
+                      timeLabelLocation: TimeLabelLocation.above,
+                      timeLabelTextStyle: TextStyle(
+                        color: Theme.of(context).textTheme.labelSmall!.color,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      progress: postionData?.position ?? Duration.zero,
+                      buffered: postionData?.bufferedPosition ?? Duration.zero,
+                      total: postionData?.duration ?? Duration.zero,
+                      onSeek: _audioPlayer.seek,
                     ),
-                    progress: postionData?.position ?? Duration.zero,
-                    buffered: postionData?.bufferedPosition ?? Duration.zero,
-                    total: postionData?.duration ?? Duration.zero,
-                    onSeek: _audioPlayer.seek,
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              child: ControlBar(audioPlayer: _audioPlayer),
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: ControlBar(audioPlayer: _audioPlayer),
+              ),
 
-            AudioBottomWidget(audioPlayer: _audioPlayer),
-          ],
+              AudioBottomWidget(audioPlayer: _audioPlayer),
+            ],
+          ),
         ),
       ),
     );
