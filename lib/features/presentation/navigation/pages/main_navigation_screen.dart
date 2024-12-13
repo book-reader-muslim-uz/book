@@ -13,9 +13,9 @@ import 'package:lazy_load_indexed_stack/lazy_load_indexed_stack.dart';
 class MainNavigationScreen extends StatelessWidget {
   const MainNavigationScreen({super.key});
   static List<Widget> pages = [
-    HomePage(),
-    FavoriteScreen(),
-    SettingScreen(),
+    const HomePage(),
+    const FavoriteScreen(),
+    const SettingScreen(),
   ];
   @override
   Widget build(BuildContext context) {

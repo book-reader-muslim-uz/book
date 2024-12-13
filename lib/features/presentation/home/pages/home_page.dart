@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage> {
         key: _refreshIndicatorKey,
         onRefresh: _onRefresh,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
           child: Column(
             children: [
               Row(

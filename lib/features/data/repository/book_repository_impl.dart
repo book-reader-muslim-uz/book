@@ -14,7 +14,6 @@ class BookRepositoryImpl implements BookRepository {
   Future<Either<Failure, List<BookEntity>>> getAudioBooks() async {
     try {
       final result = await bookRemoteDatasource.getAudiobooks();
-      print(result);
       return Right(result.map((model) => model.toEntity()).toList());
     } on DioException {
       throw Left(DioFailure());

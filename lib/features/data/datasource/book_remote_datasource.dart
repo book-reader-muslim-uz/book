@@ -36,10 +36,8 @@ class BookRemoteDatasourceImpl implements BookRemoteDatasource {
     try {
       final response = await dioClient.get(url: AppConstants.bookUrl);
       final result = response.data as Map<String, dynamic>;
-      print(result);
       return result.entries.map(
         (e) {
-          print(e);
 
           e.value["id"] = e.key;
           return BookModel.fromMap(e.value);

@@ -1,5 +1,3 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -10,28 +8,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.white,
       forceMaterialTransparency: true,
-      title: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: "book".tr(context: context),
-              style: TextStyle(
-                color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
-                    ? Colors.white
-                    : Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(
-              text: "collection".tr(context: context),
-              style: const TextStyle(
-                color: Color(0xffD1618A),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            )
-          ],
+      leadingWidth: 70,
+      leading: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Image.asset(
+          "assets/images/book_logo.png",
+        ),
+      ),
+      centerTitle: true,
+      title: const Text(
+        "Sharh al-Aqoid\nan-Nasafiya",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 20,
+          height: 1,
+          color: Color(0xff39aa35),
         ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:book/core/constants/enums.dart';
 import 'package:book/core/theme/app_colors.dart';
 import 'package:book/core/widgets/cache_image.dart';
 import 'package:book/features/domain/entity/book_entity.dart';
@@ -22,7 +21,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SearchCubit(allBooks: books),
-      child: _SearchScreenContent(),
+      child: const _SearchScreenContent(),
     );
   }
 }

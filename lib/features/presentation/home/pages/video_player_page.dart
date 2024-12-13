@@ -31,7 +31,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   Future<bool> _checkConnectivity() async {
     final connectivityResult = await Connectivity().checkConnectivity();
-    return connectivityResult != ConnectivityResult.none;
+    return connectivityResult[0] != ConnectivityResult.none;
   }
 
   String? _extractVideoId(String url) {
@@ -88,7 +88,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       // Add listener for errors
       _controller!.addListener(() {
         if (_controller!.value.hasError) {
-          print('YouTube Player Error: ${_controller!.value.errorCode}');
           _handlePlayerError();
         }
       });
@@ -100,7 +99,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         _retryCount = 0; // Reset retry count on successful initialization
       });
     } catch (error) {
-      print('YouTube player initialization error: $error');
       _handlePlayerError();
     }
   }
@@ -235,12 +233,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           playedColor: Colors.red,
           handleColor: Colors.redAccent,
         ),
-        onReady: () {
-          print('Player is ready.');
-        },
-        onEnded: (YoutubeMetaData metaData) {
-          print('Video ended: ${metaData.videoId}');
-        },
+        onReady: () {},
+        onEnded: (YoutubeMetaData metaData) {},
       );
     }
 

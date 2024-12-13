@@ -6,13 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:just_audio/just_audio.dart';
-import 'dart:async';
-import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:book/core/theme/app_colors.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gap/gap.dart';
-import 'package:just_audio/just_audio.dart';
 
 class AudioBottomWidget extends StatefulWidget {
   final AudioPlayer audioPlayer;

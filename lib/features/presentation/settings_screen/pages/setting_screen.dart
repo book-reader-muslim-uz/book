@@ -1,3 +1,6 @@
+import 'package:book/core/theme/app_colors.dart';
+import 'package:book/features/presentation/settings_screen/pages/about_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
@@ -94,7 +97,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       return ListTile(
                         leading: Icon(
                           isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                          color: Colors.blue.shade800,
+                          color: AppColors.primaryColor,
                         ),
                         title: Text(
                           isDarkMode
@@ -103,11 +106,11 @@ class _SettingScreenState extends State<SettingScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
-                            color: Colors.blue.shade800,
+                            color: AppColors.primaryColor,
                           ),
                         ),
                         trailing: Switch.adaptive(
-                          activeColor: Colors.blue.shade800,
+                          activeColor: AppColors.primaryColor,
                           value: isDarkMode,
                           onChanged: (bool value) => _toggleTheme(),
                         ),
@@ -118,14 +121,14 @@ class _SettingScreenState extends State<SettingScreen> {
                   ListTile(
                     leading: Icon(
                       Icons.language,
-                      color: Colors.blue.shade800,
+                      color: AppColors.primaryColor,
                     ),
                     title: Text(
                       'languages'.tr(context: context),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Colors.blue.shade800,
+                        color: AppColors.primaryColor,
                       ),
                     ),
                     trailing: PopupMenuButton<String>(
@@ -161,6 +164,27 @@ class _SettingScreenState extends State<SettingScreen> {
                       ),
                     ),
                   ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        CupertinoPageRoute(
+                          builder: (context) => const AboutScreen(),
+                        ),
+                      );
+                    },
+                    leading: Icon(
+                      Icons.info,
+                      color: AppColors.primaryColor,
+                    ),
+                    title: Text(
+                      "about_us".tr(context: context),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
